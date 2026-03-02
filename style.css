@@ -10,8 +10,6 @@ body {
     background: #f4f6f9;
     color: #333;
 }
-
-/* HEADER */
 .main-header {
     background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
     display: flex;
@@ -36,7 +34,6 @@ nav a:hover {
     color: #00d4ff;
 }
 
-/* HERO */
 .hero {
     height: 80vh;
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
@@ -72,14 +69,12 @@ nav a:hover {
     background: white;
 }
 
-/* SECTION */
 .section-title {
     text-align: center;
     margin: 60px 0 30px;
     font-size: 30px;
 }
 
-/* PRODUCTS GRID */
 .products {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -117,10 +112,10 @@ nav a:hover {
     margin-bottom: 20px;
 }
 
-/* FOOTER */
 footer {
     background: #0f2027;
     color: white;
     text-align: center;
     padding: 20px;
 }
+
