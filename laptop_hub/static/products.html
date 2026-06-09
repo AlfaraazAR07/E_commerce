@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaptopHub - Products</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <header>
+        <h1><a href="index.html">LaptopHub</a></h1>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="products.html" class="active">Products</a>
+            <a href="cart.html" class="cart-icon">Cart <span class="cart-count">0</span></a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <section class="section">
+        <h2 id="pageTitle">All Products</h2>
+
+        <div class="category-filter" id="categoryFilter">
+            <a href="products.html" class="active">All</a>
+        </div>
+
+        <div class="products" id="productGrid"></div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 LaptopHub | All Rights Reserved</p>
+    </footer>
+
+    <script src="../static/data.js"></script>
+    <script src="../static/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var params = new URLSearchParams(window.location.search);
+            var category = params.get('category');
+            var search = params.get('search');
+
+            var filterContainer = document.getElementById('categoryFilter');
+            CATEGORIES.forEach(function (cat) {
+                var activeClass = category === cat.slug ? ' active' : '';
+                filterContainer.innerHTML += '<a href="products.html?category=' + cat.slug + '"' + activeClass + '>' + cat.name + '</a>';
+            });
+
+            var filtered = PRODUCTS;
+            var title = 'All Products';
+
+            if (category) {
+                filtered = PRODUCTS.filter(function (p) { return p.category === category; });
+                var catObj = CATEGORIES.find(function (c) { return c.slug === category; });
+                title = catObj ? catObj.name + ' Laptops' : 'Products';
+            }
+
+            if (search) {
+                var q = search.toLowerCase();
+                filtered = PRODUCTS.filter(function (p) {
+                    return p.name.toLowerCase().indexOf(q) > -1 || p.description.toLowerCase().indexOf(q) > -1;
+                });
+                title = 'Search Results for "' + search + '"';
+            }
+
+            document.getElementById('pageTitle').textContent = title;
+
+            var grid = document.getElementById('productGrid');
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p style="grid-column:1/-1;color:#666;">No products found.</p>';
+                return;
+            }
+
+            filtered.forEach(function (product) {
+                grid.innerHTML += '<div class="card">' +
+                    '<img src="' + product.image + '" alt="' + product.name + '">' +
+                    '<div class="card-content">' +
+                    '<h3>' + product.name + '</h3>' +
+                    '<p class="description">' + product.description + '</p>' +
+                    '<p class="price">₹' + product.price.toLocaleString('en-IN') + '</p>' +
+                    '<button class="add-to-cart" data-product-id="' + product.id + '">Add to Cart</button>' +
+                    '</div></div>';
+            });
+        });
+    </script>
+    <script src="../script.js"></script>
+</body>
+
+</html>

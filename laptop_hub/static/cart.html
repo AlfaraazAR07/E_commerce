@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaptopHub - Cart</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <header>
+        <h1><a href="index.html">LaptopHub</a></h1>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="cart.html" class="active cart-icon">Cart <span class="cart-count">0</span></a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <section class="cart-section">
+        <h2>Shopping Cart</h2>
+        <div id="cartContent"></div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 LaptopHub | All Rights Reserved</p>
+    </footer>
+
+    <script src="../static/data.js"></script>
+    <script src="../static/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var cart = Cart.getCart();
+            var container = document.getElementById('cartContent');
+
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="empty-cart">' +
+                    '<h3>Your cart is empty</h3>' +
+                    '<p>Add some laptops to get started!</p>' +
+                    '<a href="products.html" class="btn btn-primary" style="margin-top:20px;">Browse Products</a>' +
+                    '</div>';
+                return;
+            }
+
+            var total = 0;
+            var html = '<table class="cart-table"><thead><tr>' +
+                '<th>Product</th><th>Name</th><th>Price</th><th>Quantity</th><th>Total</th><th>Action</th>' +
+                '</tr></thead><tbody>';
+
+            cart.forEach(function (item) {
+                var product = PRODUCTS.find(function (p) { return p.id === item.id; });
+                if (product) {
+                    var lineTotal = product.price * item.quantity;
+                    total += lineTotal;
+                    html += '<tr>' +
+                        '<td><img src="' + product.image + '" alt="' + product.name + '"></td>' +
+                        '<td>' + product.name + '</td>' +
+                        '<td>₹' + product.price.toLocaleString('en-IN') + '</td>' +
+                        '<td><input type="number" class="quantity-input" value="' + item.quantity + '" min="1" data-product-id="' + item.id + '"></td>' +
+                        '<td>₹' + lineTotal.toLocaleString('en-IN') + '</td>' +
+                        '<td><button class="remove-btn" data-product-id="' + item.id + '">Remove</button></td>' +
+                        '</tr>';
+                }
+            });
+
+            html += '</tbody></table>' +
+                '<div class="cart-total">Total: ₹' + total.toLocaleString('en-IN') + '</div>' +
+                '<div class="cart-actions">' +
+                '<a href="products.html" class="btn btn-secondary">Continue Shopping</a>' +
+                '<button class="btn btn-primary" id="checkoutBtn">Checkout (Demo)</button>' +
+                '</div>';
+
+            container.innerHTML = html;
+
+            document.querySelectorAll('.quantity-input').forEach(function (input) {
+                input.addEventListener('change', function () {
+                    var productId = parseInt(this.dataset.productId);
+                    var qty = parseInt(this.value);
+                    var cart = Cart.getCart();
+                    for (var i = 0; i < cart.length; i++) {
+                        if (cart[i].id === productId) {
+                            cart[i].quantity = qty > 0 ? qty : 1;
+                            break;
+                        }
+                    }
+                    Cart.saveCart(cart);
+                    location.reload();
+                });
+            });
+
+            document.querySelectorAll('.remove-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var productId = parseInt(this.dataset.productId);
+                    Cart.removeFromCart(productId);
+                    location.reload();
+                });
+            });
+
+            document.getElementById('checkoutBtn').addEventListener('click', function () {
+                alert('Order placed successfully! (This is a demo)');
+                Cart.clearCart();
+                location.reload();
+            });
+        });
+    </script>
+    <script src="../script.js"></script>
+</body>
+
+</html>

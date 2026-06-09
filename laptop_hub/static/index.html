@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaptopHub - Home</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <header>
+        <h1><a href="index.html">LaptopHub</a></h1>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav>
+            <a href="index.html" class="active">Home</a>
+            <a href="products.html">Products</a>
+            <a href="cart.html" class="cart-icon">Cart <span class="cart-count">0</span></a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <section class="banner">
+        <h2>Welcome to LaptopHub</h2>
+        <p>Your One Stop Laptop Store - Find the perfect laptop for your needs</p>
+        <form class="search-bar" id="searchForm">
+            <input type="text" id="searchInput" placeholder="Search laptops...">
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <section class="section">
+        <h2>Featured Laptops</h2>
+        <div class="products" id="featuredProducts"></div>
+    </section>
+
+    <section class="section" style="background: #e9ecef;">
+        <h2>Shop by Category</h2>
+        <div class="category-filter">
+            <a href="products.html?category=business">Business Laptops</a>
+            <a href="products.html?category=gaming">Gaming Laptops</a>
+            <a href="products.html?category=professional">Professional Laptops</a>
+            <a href="products.html?category=student">Student Laptops</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 LaptopHub | All Rights Reserved</p>
+    </footer>
+
+    <script src="../static/data.js"></script>
+    <script src="../static/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var featured = PRODUCTS.filter(function (p) { return p.featured; });
+            var container = document.getElementById('featuredProducts');
+
+            featured.forEach(function (product) {
+                container.innerHTML += '<div class="card">' +
+                    '<img src="' + product.image + '" alt="' + product.name + '">' +
+                    '<div class="card-content">' +
+                    '<h3>' + product.name + '</h3>' +
+                    '<p class="description">' + product.description.substring(0, 60) + '...</p>' +
+                    '<p class="price">₹' + product.price.toLocaleString('en-IN') + '</p>' +
+                    '<button class="add-to-cart" data-product-id="' + product.id + '">Add to Cart</button>' +
+                    '</div></div>';
+            });
+
+            document.getElementById('searchForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                var query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    window.location.href = 'products.html?search=' + encodeURIComponent(query);
+                }
+            });
+        });
+    </script>
+    <script src="../script.js"></script>
+</body>
+
+</html>
